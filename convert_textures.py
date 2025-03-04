@@ -28,13 +28,16 @@ class ConvertTextures:
     def red_alpha_texture(self):
         img = Image.open(self.input_image_path).convert("L")  # Convert to grayscale
         img_array = np.array(img)
+
+        # Create a 3-channel image with the red channel mapped to grayscale values
         new_img_array = np.zeros((img_array.shape[0], img_array.shape[1], 3), dtype=np.uint8)
-        new_img_array[img_array == 255] = [255, 0, 0]  # White becomes Red (opaque)
-        new_img_array[img_array == 0] = [0, 0, 0]      # Black stays black (transparent)
+        new_img_array[:, :, 0] = img_array  # Assign grayscale values to the Red channel
+
         new_img = Image.fromarray(new_img_array)
         new_img.save(self.alpha_output_path)
 
-
-input = Path("./DefaultMaterial_Normal.png")
+input = Path("/mnt/e/MODS/FINAL/slickback/natives/stm/product/model/esf/esf007/000/00/beard_alpha.png")
+ct = ConvertTextures(input)
+ct.red_alpha_texture()
 # Example usage
 
